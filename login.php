@@ -21,9 +21,9 @@ if (isset($_GET['error']) && $_GET['error'] == 'invalid_credentials') {
 <header>
     <nav>
         <div class="banner">
-            <a href="home.php">Home</a>
+            <a href="#" onclick="checkAuthentication('home.php')">Home</a>
             <a href="about.php">About Us</a>
-            <a href="features.php">Features</a>
+            <a href="#" onclick="checkAuthentication('features.php')">Features</a>
             <a href="contact.php">Contact Us</a>
             <a href="#" onclick="checkAuthentication('dashboard.php')">Dashboard</a>
             <a href="#" onclick="checkAuthentication('profile.php')">Profile Settings</a>
@@ -56,7 +56,6 @@ if (isset($_GET['error']) && $_GET['error'] == 'invalid_credentials') {
     </div>
 </div>
 
-<!-- Modal for error message -->
 <?php if ($error_message != ''): ?>
     <div class="modal" id="errorModal">
         <div class="modal-content">
@@ -67,13 +66,48 @@ if (isset($_GET['error']) && $_GET['error'] == 'invalid_credentials') {
     </div>
 <?php endif; ?>
 
+<div class="modal" id="authModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+        <h3>Access Restricted</h3>
+        <p id="authMessage"></p>
+    </div>
+</div>
+
 <script>
+    // Function to close the modal
     function closeModal() {
         document.getElementById('errorModal').style.display = 'none';
     }
+
+    // Show the modal if there's an error message
     <?php if ($error_message != ''): ?>
     document.getElementById('errorModal').style.display = 'block';
     <?php endif; ?>
+
+    // Function to check if a user is authenticated
+    function checkAuthentication(page) {
+        // Display the appropriate message based on the link clicked
+        const authModal = document.getElementById('authModal');
+        const authMessage = document.getElementById('authMessage');
+        if (page === 'dashboard.php') {
+            authMessage.textContent = "You must log in or register to view your Dashboard.";
+        } else if (page === 'profile.php') {
+            authMessage.textContent = "You must log in or register to create or modify profile settings.";
+        } else if (page === 'home.php') {
+            authMessage.textContent = "You must log in or register to view your Home page.";
+        } else if (page === 'features.php') {
+            authMessage.textContent = "You must log in or register to view Features.";
+        }
+
+        // Show the modal
+        authModal.style.display = 'block';
+    }
+
+    // Function to close the authentication modal
+    function closeAuthModal() {
+        document.getElementById('authModal').style.display = 'none';
+    }
 </script>
 
 </body>

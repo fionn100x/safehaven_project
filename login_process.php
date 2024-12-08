@@ -13,7 +13,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 // Connection successful
-echo "Connected successfully";
 
 session_start(); // Start session for tracking login
 
@@ -34,12 +33,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Password is correct, log the user in
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['first_name'] = $user['first_name'];
-            header("Location: dashboard.php"); // Redirect to dashboard (or any other page)
+            header("Location: home.php"); // Redirect to dashboard (or any other page)
+            exit();
         } else {
-            echo "Invalid password!";
+            // Incorrect password, redirect with error
+            header("Location: login.php?error=invalid_credentials");
+            exit();
         }
     } else {
-        echo "No user found with that email!";
+        // No user found with that email, redirect with error
+        header("Location: login.php?error=invalid_credentials");
+        exit();
     }
 
     // Close the database connection
