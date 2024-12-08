@@ -39,32 +39,14 @@ if (isset($_GET['error'])) {
     </nav>
 </header>
 <div class="left-section">
-    <h1>SIGN UP</h1>
-    <p>Enter your email and password to register.</p>
-    <form action="register_process.php" method="POST" autocomplete="off">
-        <label for="first_name">First Name</label>
-        <input type="text" id="first_name" name="first_name" required>
+    <h1>WELCOME TO SAFE HAVEN</h1>
+    <p>Your journey to better mental well-being begins here.</p>
+    <p>Safe Haven is your one-stop platform for managing and improving mental health.</p>
 
-        <label for="last_name">Last Name</label>
-        <input type="text" id="last_name" name="last_name" required>
-
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required autocomplete="off">
-
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required autocomplete="new-password">
-
-        <div class="checkbox-container">
-            <label for="terms">
-                <input type="checkbox" id="terms" name="terms" required>
-                I agree to the <a href="terms.php" target="_blank">terms and conditions</a>
-            </label>
-        </div>
-
-        <input type="submit" value="SIGN UP">
-
-        <p class="login-link">Already have an account? <a href="login.php">Sign in</a></p>
-    </form>
+    <div class="button-container">
+        <a href="register.php" class="button">REGISTER</a>
+        <a href="login.php" class="button">LOGIN</a>
+    </div>
 </div>
 
 <div class="right-section">
@@ -119,8 +101,8 @@ if (isset($_GET['error'])) {
         } else if (page === 'home.php') {
             authMessage.textContent = "You must log in or register to view your Home page.";
         } else if (page === 'features.php') {
-        authMessage.textContent = "You must log in or register to view Features.";
-    }
+            authMessage.textContent = "You must log in or register to view Features.";
+        }
 
         // Show the modal
         authModal.style.display = 'block';
