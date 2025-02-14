@@ -1,14 +1,13 @@
 <?php
 // Include database connection file
-$host = 'localhost'; // XAMPP runs MySQL on localhost
-$username = 'root'; // Default MySQL username in XAMPP
-$password = ''; // Default MySQL password is empty in XAMPP
+global $conn;
+$host = 'localhost';
+$username = 'root';
+$password = '';
 $dbname = 'db'; // Your database name
-
-// Create connection
+// Make it globally accessible
 $conn = new mysqli($host, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -33,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Password is correct, log the user in
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['first_name'] = $user['first_name'];
-            header("Location: home.php"); // Redirect to dashboard (or any other page)
+            header("Location: dashboard.php"); // Redirect to dashboard (or any other page)
             exit();
         } else {
             // Incorrect password, redirect with error

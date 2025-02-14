@@ -1,0 +1,939 @@
+body {
+    background: linear-gradient(to right, #800080, #FF00FF); /* Purple to pink gradient */
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Header Styles */
+header {
+    width: 100%;
+    height: 62px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+header nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #CC6CE7;
+    font-size: 20px;
+}
+
+/* Banner Styles */
+.banner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.banner a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 30px;
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.banner a:hover {
+    background-color: #AA59C8;
+    color: white;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+/* Modal Container */
+#viewProfileModal {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    z-index: 1000;
+    padding: 20px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Modal Content */
+#viewProfileModal .modal-content {
+    border-radius: 12px;
+    width: 80%;
+    max-width: 650px;
+    padding: 40px;
+    box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.3);
+    background-color: #333; /* Dark background for contrast */
+    transform: scale(0);
+    animation: scaleIn 0.4s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Modal Opening Animation */
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Profile Picture Styling */
+#viewProfileModal .modal-profile-pic {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 30px;
+    border: 8px solid #cc6ce7; /* Elegant border around the profile picture */
+    transition: transform 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Add shadow for depth */
+}
+
+#viewProfileModal .modal-profile-pic:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Profile Name Styling */
+#viewProfileModal #profileName {
+    font-size: 32px;
+    color: white; /* Purple */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    margin: 15px 0;
+    text-transform: capitalize; /* Capitalize first letter of each word */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Add text shadow for depth */
+}
+
+/* Profile Info Styling */
+#viewProfileModal .modal-content p {
+    font-size: 20px;
+    color: #fff; /* White text for the values */
+    line-height: 1.6;
+    font-family: 'Open Sans', sans-serif;
+    margin: 20px 0;
+    padding: 0 10px;
+    text-align: center; /* Center text for uniformity */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+/* Bold labels (like Friends: Likes:) */
+#viewProfileModal .modal-content p span {
+    font-weight: bold;
+    color: #cc6ce7; /* Use purple for labels */
+    text-transform: uppercase; /* Make labels more prominent */
+}
+
+/* Hover effects for profile details */
+#viewProfileModal .modal-content p:hover {
+    color: #AA59C8; /* Change color on hover for interactivity */
+}
+
+/* Button Styling */
+#viewProfileModal .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 36px;
+    font-weight: bold;
+    color: #cc6ce7;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#viewProfileModal .close-btn:hover {
+    color: #800080; /* Change color on hover */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    #viewProfileModal .modal-content p {
+        font-size: 16px; /* Slightly smaller font size for mobile */
+    }
+
+    #viewProfileModal #profileName {
+        font-size: 24px; /* Adjust profile name size on smaller screens */
+    }
+
+    #viewProfileModal .modal-profile-pic {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    height: 100vh; /* Full viewport height */
+    background-color: #800080; /* Purple background */
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: space-between;
+}
+
+.sidebar-logo {
+    width: 80%; /* Adjust size */
+    max-width: 180px; /* Prevent it from getting too large */
+    margin-top: 25%; /* Space from the top */
+    margin-bottom: 20px; /* Space below the logo */
+    position: absolute;
+}
+
+/* Wrapper to center the button chunk */
+.sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center; /* Center the buttons */
+    margin-top: 5%; /* Small offset to lower it a bit */
+    width: 100%;
+}
+
+/* Button styles */
+.sidebar a {
+    display: block;
+    width: 88%; /* Match sidebar width */
+    background-color: #800080; /* Same purple as sidebar */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 15px;
+    text-transform: uppercase; /* Black line above each button */
+    border-bottom: 2px solid black; /* Black line below each button */
+
+}
+
+/* Remove the top border from the first button */
+.sidebar a:first-child {
+    border-top: 2px solid black;
+}
+
+/* Remove the bottom border from the last button */
+.sidebar a:last-child {
+    border-bottom: 2px solid black;
+}
+
+/* Hover effect */
+.sidebar a:hover {
+    background-color: #AA59C8; /* Lighter purple on hover */
+}
+
+@media (max-width: 768px) {
+    .sidebar-buttons {
+        margin-top: 20px; /* Move the buttons 20px down from the top */
+        margin-bottom: 20px; /* Optional: Add space at the bottom if needed */
+    }
+
+    .sidebar {
+        width: 200px; /* Optional: Adjust sidebar width for smaller screens */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Keep links at the top */
+    }
+
+    .sidebar a {
+        padding: 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 16px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        transition: background-color 0.3s;
+        border-bottom: 2px solid black;
+        width: 100%; /* Ensure the buttons fill the width of the sidebar */
+    }
+
+    .sidebar a:last-child {
+        border-bottom: none; /* Remove border from the last link */
+    }
+
+    .sidebar a:hover {
+        background-color: #AA59C8;
+        border-radius: 5px;
+    }
+
+    /* If you want to center the button chunk in the middle of the screen */
+    .sidebar-buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Align to the top of the sidebar */
+        align-items: center;
+        height: 100vh;
+    }
+}
+
+/* Modal Overlay */
+#viewProfileModal {
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%; /* Position it to be centered vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for true centering */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    z-index: 1000;
+    padding: 20px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Modal Content Styling */
+#viewProfileModal .modal-content {
+    background-color: #fff; /* White background for content */
+    border-radius: 15px;
+    width: 80%; /* Default width for larger screens */
+    max-width: 600px;
+    padding: 40px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(0);
+    animation: scaleIn 0.4s forwards;
+    overflow: hidden; /* Prevents overflow of text */
+}
+
+/* Modal Opening Animation */
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Profile Picture Styling */
+#viewProfileModal .modal-profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 5px solid #cc6ce7; /* Elegant border around the profile picture */
+    transition: transform 0.3s ease;
+}
+
+#viewProfileModal .modal-profile-pic:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Profile Name Styling */
+#viewProfileModal #profileName {
+    font-size: 28px;
+    color: #800080; /* Purple */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center; /* Center the profile name */
+}
+
+/* Profile Info Styling */
+#viewProfileModal .modal-content p {
+    font-size: 18px; /* Increased font size */
+    color: #333; /* Dark gray for contrast */
+    line-height: 1.6;
+    font-family: 'Open Sans', sans-serif;
+    margin: 15px 0;
+    padding: 0 10px;
+    text-align: left; /* Align text to the left */
+}
+
+/* Bold labels (like Friends: Likes:) */
+#viewProfileModal .modal-content p span {
+    font-weight: bold;
+    color: #800080; /* Purple color for labels */
+}
+
+/* Specific color for each profile detail */
+#viewProfileModal #profileBio,
+#viewProfileModal #profileLikes,
+#viewProfileModal #profileDislikes,
+#viewProfileModal #profileFriends,
+#viewProfileModal #profileMeditations,
+#viewProfileModal #profileJournals,
+#viewProfileModal #profileBlossoms,
+#viewProfileModal #profileLevel {
+    color: #333; /* Dark gray for text */
+}
+
+/* Button Styling */
+#viewProfileModal .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #cc6ce7;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#viewProfileModal .close-btn:hover {
+    color: #800080;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    #viewProfileModal .modal-content {
+        width: 85%;  /* Reduce the width to 85% of the screen */
+        max-width: 450px;  /* Further reduce the max-width */
+        padding: 15px;  /* Reduce the padding inside the modal */
+    }
+
+    #viewProfileModal #profileName {
+        font-size: 20px;  /* Make the profile name smaller */
+    }
+
+    #viewProfileModal .modal-profile-pic {
+        width: 120px;  /* Reduce the size of the profile picture */
+        height: 120px;
+    }
+
+    .stat-card {
+        font-size: 14px;  /* Reduce the font size of the stats */
+        padding: 10px;  /* Reduce padding in stat cards */
+    }
+}
+
+/* New media query for laptop-sized screens (1024px and below) */
+@media (max-width: 1024px) {
+    #viewProfileModal .modal-content {
+        width: 70%;  /* Reduce the width for medium screens */
+        max-width: 500px;  /* Set a max-width to prevent it from being too wide */
+        padding: 25px;  /* Adjust padding for a balanced look */
+    }
+
+    #viewProfileModal #profileName {
+        font-size: 22px;  /* Slightly smaller font size for laptop screens */
+    }
+
+    #viewProfileModal .modal-profile-pic {
+        width: 130px;  /* Smaller profile picture for better scaling */
+        height: 130px;
+    }
+
+    .stat-card {
+        font-size: 15px;  /* Slightly smaller font size in stat cards */
+        padding: 12px;  /* Adjust padding in stat cards */
+    }
+}
+
+/* Stat Cards Styling */
+.stat-card {
+    display: flex;
+    align-items: center;
+    background-color: #444;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 15px;
+    width: 100%;
+    color: white;
+    font-size: 18px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card i {
+    margin-right: 10px;
+    color: #cc6ce7;
+    font-size: 24px;
+}
+
+.stat-card:hover {
+    background-color: #575757;
+}
+
+/* Progress Bar Styling */
+.progress-bar {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.progress {
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.progress-filled {
+    height: 100%;
+    background-color: #cc6ce7;
+    border-radius: 5px;
+}
+
+#editProfileModal {
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%; /* Position it to be centered vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for true centering */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    z-index: 1000;
+    padding: 20px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Modal Content Styling */
+#editProfileModal .modal-content {
+    background-color: #fff; /* White background for content */
+    border-radius: 15px;
+    width: 80%; /* Default width for larger screens */
+    max-width: 600px;
+    padding: 40px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(0);
+    animation: scaleIn 0.4s forwards;
+    overflow: hidden;
+}
+
+#editProfileModal .modal-profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 5px solid #cc6ce7; /* Elegant border around the profile picture */
+    transition: transform 0.3s ease;
+}
+
+#editProfileModal .modal-profile-pic:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Modal Opening Animation */
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Profile Name Styling */
+#editProfileModal #editProfileName {
+    font-size: 28px;
+    color: #800080; /* Purple */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center; /* Center the profile name */
+}
+
+/* Form Styling */
+#editProfileModal form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#editProfileModal form label {
+    font-size: 18px;
+    color: #333;
+}
+
+#editProfileModal form input,
+#editProfileModal form textarea {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+#editProfileModal form button.save-btn {
+    background-color: #800080;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+#editProfileModal form button.save-btn:hover {
+    background-color: #cc6ce7;
+}
+
+/* Close Button Styling */
+#editProfileModal .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #cc6ce7;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#editProfileModal .close-btn:hover {
+    color: #800080;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    #editProfileModal .modal-content {
+        width: 85%; /* Reduce the width to 85% of the screen */
+        max-width: 450px; /* Further reduce the max-width */
+        padding: 20px; /* Reduce the padding inside the modal */
+    }
+
+    #editProfileModal #editProfileName {
+        font-size: 20px; /* Make the profile name smaller */
+    }
+
+    #editProfileModal form input,
+    #editProfileModal form textarea {
+        font-size: 14px; /* Slightly smaller input text */
+    }
+
+    #editProfileModal form button.save-btn {
+        font-size: 16px; /* Adjust button font size for smaller screens */
+    }
+}
+
+#musicControl {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+#playPauseBtn {
+    background-color: #cc6ce7;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#playPauseBtn:hover {
+    background-color: #800080;
+}
+
+h2, p {
+    text-align: center;
+}
+
+
+
+/* Main content positioning */
+.main-content {
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px; /* Make the sidebar narrower on smaller screens */
+    }
+
+    .main-content {
+        margin-left: 200px; /* Adjust the main content to match the new sidebar width */
+        width: calc(100% - 200px); /* Adjust content width accordingly */
+    }
+
+    /* Mobile view adjustments */
+    .sidebar a {
+        font-size: 14px; /* Slightly smaller text for mobile screens */
+        padding: 12px; /* Adjust padding for smaller screens */
+    }
+
+    .sidebar-logo {
+        width: 50%; /* Set logo width to 50% of sidebar */
+        display: block; /* Ensures the image behaves like a block element */
+        margin: 0 auto; /* Centers the logo horizontally */
+        position: relative; /* Allows for top positioning */
+        top: 60px; /* Adjust this value to move the logo down */
+    }
+}
+
+.safe-haven-text {
+    position: absolute; /* Position it outside the sidebar */
+    top: 20px; /* Distance from the top */
+    left: 250px; /* Move it right next to the sidebar */
+    z-index: 10; /* Keep it above other content */
+}
+
+.safe-haven-img {
+    width: 60%; /* Adjust width as needed */
+    display: block;
+    margin: 0 auto;
+    margin-left: 8%;
+}
+
+.profile-info {
+    position: fixed;
+    top: 80px; /* Adjust as needed */
+    right: 20px; /* Keeps everything near the top-right */
+    display: flex;
+    align-items: center; /* Aligns friends icon & profile pic vertically */
+}
+
+.profile-level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px; /* Space between Meditations icon and Journals icon */
+}
+
+.level-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px; /* Space between icon and count */
+}
+
+.level-count {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff; /* Change as needed */
+    text-align: center;
+}
+
+.profile-blossoms {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px; /* Space between Meditations icon and Journals icon */
+}
+
+.blossoms-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px; /* Space between icon and count */
+}
+
+.blossoms-count {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff; /* Change as needed */
+    text-align: center;
+}
+
+.profile-meditations {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px; /* Space between Meditations icon and Journals icon */
+}
+
+.meditations-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px; /* Space between icon and count */
+}
+
+.meditations-count {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff; /* Change as needed */
+    text-align: center;
+}
+
+.profile-journals {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px; /* Space between journals icon and friends icon */
+}
+
+.journals-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px; /* Space between icon and count */
+}
+
+.journals-count {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff; /* Change as needed */
+    text-align: center;
+}
+
+.profile-friends {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px; /* Space between friends icon and profile pic */
+}
+
+.friends-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px; /* Space between icon and count */
+}
+
+.friends-count {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff; /* Change as needed */
+    text-align: center;
+}
+
+.profile-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #fff;
+    background-color: #f0f0f0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.profile-circle:hover {
+    transform: scale(1.1); /* Slightly expands */
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+/* Modal Content */
+.modal-content {
+    background: linear-gradient(145deg, #800080, #4CAF50); /* Purple to Green gradient */
+    border-radius: 15px;
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: white;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Modal Header */
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFF;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #FFF;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #AA59C8;
+}
+
+/* Buttons */
+.modal-content button {
+    background: #AA59C8;
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+    background-color: #800080;
+}
+
+/* Safe Haven Logo inside the modal */
+.modal-content .modal-logo {
+    margin-bottom: 20px;
+    width: 80px; /* Adjust the size as needed */
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Modal Text */
+.modal-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: white;
+}

@@ -1,14 +1,13 @@
 <?php
 
-$host = 'localhost'; // XAMPP runs MySQL on localhost
-$username = 'root'; // Default MySQL username in XAMPP
-$password = ''; // Default MySQL password is empty in XAMPP
+global $conn;
+$host = 'localhost';
+$username = 'root';
+$password = '';
 $dbname = 'db'; // Your database name
-
-// Create connection
+// Make it globally accessible
 $conn = new mysqli($host, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -50,12 +49,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // SQL query to insert data into the users table
         $sql = "INSERT INTO users (first_name, last_name, email, password) 
-                VALUES ('$first_name', '$last_name', '$email', '$hashed_password')";
+        VALUES ('$first_name', '$last_name', '$email', '$hashed_password')";
 
         if (mysqli_query($conn, $sql)) {
-            // Registration successful, redirect to the success page
-            header("Location: register_success.php");
-            exit();
+            // Get the user ID of the newly inserted user
+            $user_id = mysqli_insert_id($conn);
+
+            // Create full_name from first_name and last_name
+            $full_name = $first_name . ' ' . $last_name;
+
+            // Insert default data into the profiles table without user_id
+            $profile_sql = "INSERT INTO profiles (user_id, first_name, last_name, full_name, birthday, bio, likes, dislikes, friends, meditations, journals, blossoms, level, profile_pic)
+                            VALUES ('$user_id', '$first_name', '$last_name', '$full_name', '', 'This is my bio!', 'None.', 'None.', 0, 0, 0, 0, 0, 'pictures/no_profile.jpg')";
+
+            if (mysqli_query($conn, $profile_sql)) {
+                // Registration successful, redirect to the success page
+                header("Location: register_success.php");
+                exit();
+            } else {
+                echo "Error: " . mysqli_error($conn);
+            }
         } else {
             echo "Error: " . mysqli_error($conn);
         }
