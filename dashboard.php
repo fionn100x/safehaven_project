@@ -416,8 +416,6 @@ mysqli_close($conn);
     editProfileModal.style.display = 'none';
 </script>
 
-<script src="audio.js"></script>
-
 <script>
     document.getElementById("logoutBtn").addEventListener("click", function () {
         window.location.href = "logout.php"; // Redirect to logout script

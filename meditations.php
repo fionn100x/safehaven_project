@@ -167,7 +167,7 @@ mysqli_close($conn);
     </header>
 </div>
 <div class="meditation-container">
-    <a href="guided_meditation.php" class="meditation-box-link">
+    <a href="meditations/guided_meditation.php" class="meditation-box-link">
         <div class="meditation-box">
             <img src="pictures/guided_meditation.jpg" alt="Guided Meditation" class="box-image">
             <div class="box-content">Guided Meditation</div>

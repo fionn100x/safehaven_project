@@ -76,7 +76,7 @@ html, body {
 
 .guided-meditation-container {
     position: relative; /* Add relative positioning */
-    top: -550px; /* Move both rows up by 20px */
+    top: -570px !important; /* Move both rows up by 20px */
     display: flex;
     flex-direction: column;
     gap: 20px;
