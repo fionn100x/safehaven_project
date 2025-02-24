@@ -101,11 +101,11 @@ mysqli_close($conn);
     </audio>
     <div class="profile-level">
         <img src="pictures/level_icon.png" alt="Level Icon" class="level-icon">
-        <p class="level-count">Level: <?php echo $meditations_count; ?></p>
+        <p class="level-count">Level: <?php echo $level_count; ?></p>
     </div>
     <div class="profile-blossoms">
         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="blossoms-icon">
-        <p class="blossoms-count"><?php echo $meditations_count; ?> Blossoms</p>
+        <p class="blossoms-count"><?php echo $blossoms_count; ?> Blossoms</p>
     </div>
     <div class="profile-meditations">
         <img src="pictures/meditations_icon.png" alt="Meditations Icon" class="meditations-icon">
@@ -167,7 +167,7 @@ mysqli_close($conn);
     </header>
 </div>
 <div class="meditation-container">
-    <a href="meditations/guided_meditation.php" class="meditation-box-link">
+    <a href="guided_meditation.php" class="meditation-box-link">
         <div class="meditation-box">
             <img src="pictures/guided_meditation.jpg" alt="Guided Meditation" class="box-image">
             <div class="box-content">Guided Meditation</div>

@@ -1,3 +1,60 @@
+<?php
+// Start the session to access the logged-in user's data
+session_start();
+
+// Connect to the database
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "db";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get the logged-in user's ID from the session (assuming it's stored in session data)
+$userId = $_SESSION['user_id']; // Adjust the session key based on how your site handles user sessions
+
+// Check if the user is logged in and the ID exists
+if ($userId) {
+    // Decode the incoming JSON request
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    // Check if the modal_shown is passed in the request
+    if (isset($data['modal_shown']) && $data['modal_shown'] === 'true') {
+        // Update Blossoms by adding 20
+        $blossomsSql = "UPDATE profiles SET Blossoms = Blossoms + 20 WHERE user_id = ?";
+        $blossomsStmt = $conn->prepare($blossomsSql);
+        $blossomsStmt->bind_param("i", $userId);
+        $blossomsStmt->execute();
+
+        // Update XP by adding 1000
+        $xpSql = "UPDATE profiles SET XP = XP + 5000 WHERE user_id = ?";
+        $xpStmt = $conn->prepare($xpSql);
+        $xpStmt->bind_param("i", $userId);
+        $xpStmt->execute();
+
+        if ($blossomsStmt->affected_rows > 0 && $xpStmt->affected_rows > 0) {
+            echo json_encode(["status" => "success", "message" => "Blossoms and XP updated successfully!"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Failed to update Blossoms or XP."]);
+        }
+
+        // Close the statements
+        $blossomsStmt->close();
+        $xpStmt->close();
+    }
+} else {
+    echo json_encode(["status" => "error", "message" => "User not logged in."]);
+}
+
+// Close the database connection
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -204,8 +261,88 @@
             transition: opacity 1s ease-in-out;
         }
 
+        #completionModal {
+            display: none; /* Modal is hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(200, 160, 255, 0.8); /* Light purple background with transparency */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Make sure modal is on top */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
 
+        #completionModal .modal-content {
+            background: linear-gradient(to bottom, #D8D8D8, #C8A2D9); /* Light silver to light purple gradient */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 3px solid #4B0082; /* Dark purple outline */
+        }
 
+        #completionModal h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: white; /* Main text white */
+        }
+
+        #completionModal p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white; /* Main text white */
+        }
+
+        #completionModal img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        #completionModal button {
+            background-color: white;
+            color: black;
+            padding: 10px 20px;
+            border: 2px solid #4B0082; /* Dark purple border */
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        #completionModal button:hover {
+            background-color: #f0f0f0;
+        }
+
+        #completionModal .blossoms-number {
+            color: red;
+        }
+
+        /* Modal visibility */
+        #completionModal.show {
+            display: flex; /* Show modal when .show class is added */
+            opacity: 1; /* Make it fully visible */
+        }
+
+        /* Animation for the modal */
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Applying the bounce animation */
+        #completionModal.show .modal-content {
+            animation: bounce 1s ease;
+        }
     </style>
 </head>
 <body>
@@ -250,6 +387,17 @@
     </div>
     <div id="countdownContainer">
         <span id="countdownTimer">03:22</span>
+    </div>
+    <div id="completionModal" class="modal">
+        <div class="modal-content">
+            <h2>Congratulations!</h2>
+            <h3>You’ve earned <strong><span class="blossoms-number">20</span></strong> Blossoms.</h3>
+            <img src="../../pictures/blossoms_icon.png" alt="Blossoms Icon">
+            <div>
+                <button id="restartMeditation">Restart Meditation</button>
+                <button id="goToGuidedMeditations">Go to Guided Meditations</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -421,10 +569,10 @@
 
         // Progress bar animation
         function animateProgressBar(duration) {
-            progressStartTime = Date.now() - elapsedTimeBeforePause; // Adjust start time to account for pause
+            progressStartTime = Date.now() - (dialog.currentTime * 1000); // Adjust based on seek position
 
             function updateProgress() {
-                if (isPaused || isSeeking) return;  // Don't update the progress if paused or seeking
+                if (isPaused || isSeeking) return;  // Don't update if paused or seeking
 
                 let elapsedTime = Date.now() - progressStartTime;
                 let progress = (elapsedTime / (duration * 1000)) * 100;  // Duration is in seconds
@@ -438,7 +586,7 @@
                 }
             }
 
-            updateProgress();
+            requestAnimationFrame(updateProgress);
         }
 
         // Show progress bar
@@ -461,21 +609,26 @@
 
             const percentage = Math.min(Math.max(clickX / width, 0), 1);
 
-            // Seek to the corresponding point in the audio
+            // Seek to the new position in the audio
             dialog.currentTime = percentage * dialog.duration;
 
-            // Instantly update progress bar
-            progressBar.style.transition = "none";
+            // Instantly update progress bar without animation delay
+            progressBar.style.transition = "none"; // Disable transition effect
             progressBar.style.width = `${percentage * 100}%`;
 
-            // Update remaining time and countdown
+            // Update remaining time immediately
             remainingTime = dialog.duration - dialog.currentTime;
             updateCountdown();
 
-            // Reset isSeeking after a brief delay
-            setTimeout(() => {
-                isSeeking = false;
-            }, 100);
+            // Reset progress tracking to the new position
+            progressStartTime = Date.now() - (dialog.currentTime * 1000); // Sync start time with seek
+
+            isSeeking = false; // Allow normal progress updates again
+
+            // Restart progress animation from the seeked position
+            if (!isPaused) {
+                requestAnimationFrame(() => animateProgressBar(dialog.duration));
+            }
         });
 
         // Ensure progress bar stays locked when audio ends
@@ -494,6 +647,81 @@
             let audio = new Audio("../../inner_child_meditation.mp3");
             audio.play();
         }, 2000); // 2-second delay before playing
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to the modal and buttons
+        const completionModal = document.getElementById("completionModal");
+        const restartButton = document.getElementById("restartMeditation");
+        const guidedMeditationsButton = document.getElementById("goToGuidedMeditations");
+        const meditationDialog = document.getElementById("meditationDialog");  // Assuming you have the dialog element
+
+        // Create a new audio element for the sound
+        const completedSound = new Audio('../../audio/completed_sound.mp3');  // Replace with the correct path to your sound file
+
+        // Show the modal when the meditation is complete
+        function showCompletionModal() {
+            completionModal.classList.add("show"); // Show modal with bounce effect
+            completionModal.classList.add("bounce");
+            completedSound.play();  // Play the completion sound
+            updateBlossomsAndXP();
+        }
+
+        function updateBlossomsAndXP() {
+            fetch('inner_child_meditation.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ modal_shown: 'true' })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        console.log("Blossoms and XP updated successfully!");
+                    } else {
+                        console.log("Error updating Blossoms or XP: ", data.message);
+                    }
+                })
+                .catch(error => console.error("Error with AJAX request: ", error));
+        }
+
+        // Restart meditation on button click
+        restartButton.addEventListener("click", function () {
+            window.location.reload();  // Reload the page to restart meditation
+        });
+
+        // Go to Guided Meditations page
+        guidedMeditationsButton.addEventListener("click", function () {
+            window.location.href = "../../guided_meditation.php";  // Navigate to the guided meditations page
+        });
+
+        // Show the modal when the meditation dialog ends
+        meditationDialog.addEventListener("ended", showCompletionModal);  // Trigger modal on meditation end
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const completionModal = document.getElementById("completionModal");
+
+        // Show the modal when the meditation is complete
+        function showCompletionModal() {
+            completionModal.classList.add("show");
+
+            // Send a POST request to update blossoms when the modal is shown
+            fetch('inner_child_meditation.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'modal_shown=true' // This signals that the modal has been shown
+            });
+        }
+
+        // Show the modal when the meditation dialog ends
+        meditationDialog.addEventListener("ended", showCompletionModal);
     });
 </script>
 </body>

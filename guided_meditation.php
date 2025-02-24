@@ -76,8 +76,8 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../dashboard.css">
-    <link rel="stylesheet" type="text/css" href="../meditations.css">
+    <link rel="stylesheet" type="text/css" href="dashboard.css">
+    <link rel="stylesheet" type="text/css" href="meditations.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Dashboard</title>
@@ -85,36 +85,36 @@ mysqli_close($conn);
 </head>
 <body>
 <audio id="backgroundMusic" loop>
-    <source src="../audio/background_music_1.mp3" type="audio/mpeg">
+    <source src="audio/background_music_1.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
 
 <div class="safe-haven-text">
-    <img src="../safe_haven_text.png" alt="Safe Haven Text" class="safe-haven-img">
+    <img src="safe_haven_text.png" alt="Safe Haven Text" class="safe-haven-img">
 </div>
 <div class="profile-info">
     <audio id="backgroundMusic" loop>
-        <source src="../audio/background_music_1.mp3" type="audio/mpeg">
+        <source src="audio/background_music_1.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     <div class="profile-level">
-        <img src="../pictures/level_icon.png" alt="Level Icon" class="level-icon">
-        <p class="level-count">Level: <?php echo $meditations_count; ?></p>
+        <img src="pictures/level_icon.png" alt="Level Icon" class="level-icon">
+        <p class="level-count">Level: <?php echo $level_count; ?></p>
     </div>
     <div class="profile-blossoms">
-        <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="blossoms-icon">
-        <p class="blossoms-count"><?php echo $meditations_count; ?> Blossoms</p>
+        <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="blossoms-icon">
+        <p class="blossoms-count"><?php echo $blossoms_count; ?> Blossoms</p>
     </div>
     <div class="profile-meditations">
-        <img src="../pictures/meditations_icon.png" alt="Meditations Icon" class="meditations-icon">
+        <img src="pictures/meditations_icon.png" alt="Meditations Icon" class="meditations-icon">
         <p class="meditations-count"><?php echo $meditations_count; ?> Meditations</p>
     </div>
     <div class="profile-journals">
-        <img src="../pictures/journals_icon.png" alt="Journals Icon" class="journals-icon">
+        <img src="pictures/journals_icon.png" alt="Journals Icon" class="journals-icon">
         <p class="journals-count"><?php echo $journals_count; ?> Journals</p>
     </div>
     <div class="profile-friends">
-        <img src="../pictures/friends_icon.png" alt="Friends Icon" class="friends-icon">
+        <img src="pictures/friends_icon.png" alt="Friends Icon" class="friends-icon">
         <p class="friends-count"><?php echo $friends_count; ?> Friends</p>
     </div>
 
@@ -126,9 +126,9 @@ mysqli_close($conn);
 
 <div class="spacer"></div>
 <div class="sidebar">
-    <img src="../safe_haven_logo.png" alt="Safe Haven Logo" class="sidebar-logo">
+    <img src="safe_haven_logo.png" alt="Safe Haven Logo" class="sidebar-logo">
     <div class="sidebar-buttons">
-        <a href="../meditations.php">Meditations</a>
+        <a href="meditations.php">Meditations</a>
         <a href="#">Interactive Quizzes</a>
         <a href="#">My Journals</a>
         <a href="#">Resources</a>
@@ -158,7 +158,7 @@ mysqli_close($conn);
                 <a href="#">About Us</a>
                 <a href="#">Features</a>
                 <a href="#">Contact Us</a>
-                <a href="../dashboard.php">Dashboard</a>
+                <a href="dashboard.php">Dashboard</a>
                 <a href="#">Profile Settings</a>
             </div>
         </nav>
@@ -170,7 +170,7 @@ mysqli_close($conn);
         <div class="card">
             <h3 class="card-title">Inner Child Meditation</h3>
             <p class="card-description">Reconnect with your younger self for healing and self-compassion.</p>
-            <a href="guided_meditations/inner_child_meditation.php" class="card-link" style="background-color: green;">Start Meditation</a>
+            <a href="meditations/guided_meditations/inner_child_meditation.php" class="card-link" style="background-color: green;">Start Meditation</a>
         </div>
 
         <div class="card">
@@ -179,7 +179,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 1 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     10
                 </a>
             </div>
@@ -191,7 +191,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 2 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     20
                 </a>
             </div>
@@ -203,7 +203,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 3 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     30
                 </a>
             </div>
@@ -215,7 +215,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 4 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     40
                 </a>
             </div>
@@ -230,7 +230,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 5 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     50
                 </a>
             </div>
@@ -242,7 +242,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 6 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     60
                 </a>
             </div>
@@ -254,7 +254,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 7 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     70
                 </a>
             </div>
@@ -266,7 +266,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 8 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     85
                 </a>
             </div>
@@ -278,7 +278,7 @@ mysqli_close($conn);
             <div class="card-links">
                 <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 9 Required</a>
                 <a href="level10.html" class="card-link" style="background-color: red; color: white;">
-                    <img src="../pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
+                    <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                     100
                 </a>
             </div>
@@ -290,7 +290,7 @@ mysqli_close($conn);
 
 <div class="modal" id="profileModal">
     <div class="modal-content">
-        <img src="../safe_haven_logo.png" alt="Safe Haven Logo" class="modal-logo">
+        <img src="safe_haven_logo.png" alt="Safe Haven Logo" class="modal-logo">
         <h2>Profile Options</h2>
         <span class="close-btn" id="closeProfileModal">&times;</span>
         <button id="viewProfileBtn">View Profile</button>
@@ -362,7 +362,7 @@ mysqli_close($conn);
         <span class="close-btn">&times;</span> <!-- Close button -->
         <h2 id="editProfileName" style="color: white">Edit Profile</h2>
 
-        <form id="editProfileForm" action="../dashboard.php" method="POST">
+        <form id="editProfileForm" action="dashboard.php" method="POST">
             <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
 
             <div class="profile-picture-container">
@@ -542,7 +542,7 @@ mysqli_close($conn);
     editProfileModal.style.display = 'none';
 </script>
 
-<script src="../audio.js"></script>
+<script src="audio.js"></script>
 
 <script>
     document.getElementById("logoutBtn").addEventListener("click", function () {
