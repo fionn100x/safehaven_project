@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id']; // Get the logged-in user's ID
 
 // Query to get user profile details
-$sql = "SELECT first_name, last_name, birthday, bio, likes, dislikes, friends, meditations, journals, blossoms, level, profile_pic FROM profiles WHERE user_id = '$user_id'";
+$sql = "SELECT first_name, last_name, birthday, bio, likes, dislikes, friends, meditations, journals, blossoms, level, profile_pic, XP FROM profiles WHERE user_id = '$user_id'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
@@ -42,6 +42,52 @@ $meditations_count = $row['meditations'];
 $journals_count = $row['journals'];
 $blossoms_count = $row['blossoms'];
 $level_count = $row['level'];
+$xp_count = $row['XP'];
+if ($xp_count >= 10000) {
+    // Calculate the remaining XP after leveling up
+    $remaining_xp = $xp_count - 10000;
+
+    // Increase level by 1
+    $new_level = $level_count + 1;
+
+    // Update the database with the remaining XP for the next level
+    $update_level_sql = "UPDATE profiles SET XP = ?, level = ? WHERE user_id = ?";
+    $stmt = $conn->prepare($update_level_sql);
+    $stmt->bind_param("iii", $remaining_xp, $new_level, $user_id);
+
+    if ($stmt->execute()) {
+        // Update the variables for immediate display
+        $xp_count = $remaining_xp;
+        $level_count = $new_level;
+
+        // Set session flag for level-up modal
+        $_SESSION['level_up'] = true;
+    }
+
+    $stmt->close();
+}
+
+$meditationPages = [
+    'inner_child_meditation.php',
+    'selfconfidence_boost.php',
+    'letting_go_of_negativity.php',
+    'energy_cleansing_meditation.php',
+    'compassion_meditation.php',
+    'pain_relief_meditation.php',
+    'grounding_meditation.php',
+    'selflove_meditation.php',
+    'overcoming_fear_meditation.php',
+    'mindful_presence_meditation.php'
+];
+
+$currentPage = basename($_SERVER['PHP_SELF']); // Get current page filename
+
+if (isset($_SESSION['level_up']) && !in_array($currentPage, $meditationPages)) {
+    $showLevelUpModal = true;
+    unset($_SESSION['level_up']); // Remove flag after displaying modal
+} else {
+    $showLevelUpModal = false;
+}
 $profile_pic = $row['profile_pic'] ?: 'pictures/no_profile.jpg'; // Fallback to default if profile picture is not set
 
 // Handle profile updates
@@ -86,6 +132,31 @@ mysqli_close($conn);
 
 </head>
 <body>
+<style>
+    .progress-bar {
+        width: 100%;
+        max-width: 300px; /* Adjust as needed */
+        margin: 20px 0;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .progress {
+        width: 100%;
+        height: 20px;
+        background-color: #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress-filled {
+        height: 100%;
+        background-color: #4caf50; /* Green progress bar */
+        width: 0%; /* This will be updated dynamically */
+        transition: width 0.5s ease-in-out;
+    }
+</style>
 <audio id="backgroundMusic" loop>
     <source src="audio/background_music_1.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
@@ -211,8 +282,24 @@ mysqli_close($conn);
         </div>
     </div>
 </div>
-
-
+<audio id="levelUpSound" src="audio/levelup.mp3" preload="auto"></audio>
+<div id="levelUpModal" class="modal" style="display: none;
+                                               position: fixed;
+                                               top: 0;
+                                               left: 0;
+                                               width: 100%;
+                                               height: 100%;
+                                               background-color: rgba(0, 0, 0, 0.7);
+                                               z-index: 1000;">
+    <div class="modal-content" style="background-color: white; padding: 20px;
+                                     border-radius: 10px; text-align: center;
+                                     position: absolute; top: 50%; left: 50%;
+                                     transform: translate(-50%, -50%); width: 80%; max-width: 400px;">
+        <h2 style="color: #4CAF50;">Level Up!</h2>
+        <p>Congratulations! You've reached Level: <span id="newLevel" style="color: black; font-weight: bold;"></span>!</p>
+        <button onclick="closeLevelUpModal()" style="padding: 10px 20px; background-color: rebeccapurple; color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button>
+    </div>
+</div>
 
 <div class="modal" id="profileModal">
     <div class="modal-content">
@@ -273,10 +360,14 @@ mysqli_close($conn);
 
         <!-- Level with Progress Bar -->
         <div class="progress-bar">
-            <span>Level: <?php echo $level_count; ?></span>
+            <span>Level: <?php echo htmlspecialchars($level_count); ?></span>
             <div class="progress">
-                <div class="progress-filled" style="width: <?php echo $level_count * 10; ?>%"></div>
+                <?php
+                $progressWidth = ($xp_count / 10000) * 100;
+                echo "<div class='progress-filled' style='width: {$progressWidth}%;'></div>";
+                ?>
             </div>
+            <span><?php echo htmlspecialchars($xp_count); ?> / 10000 XP</span>
         </div>
 
         <!-- Close Button -->
@@ -474,6 +565,31 @@ mysqli_close($conn);
     document.getElementById("logoutBtn").addEventListener("click", function () {
         window.location.href = "logout.php"; // Redirect to logout script
     });
+</script>
+
+<script>
+    var levelCount = <?php echo $level_count; ?>; // PHP variable inserted into JS
+
+    // Function to show the level-up modal
+    function showLevelUpModal() {
+        // Set the new level in the modal text
+        document.getElementById('newLevel').textContent = levelCount;
+
+        // Show the modal
+        document.getElementById('levelUpModal').style.display = 'block';
+        document.getElementById('levelUpSound').play();
+    }
+
+    // Function to close the modal
+    function closeLevelUpModal() {
+        // Hide the modal
+        document.getElementById('levelUpModal').style.display = 'none';
+    }
+
+    // Call the function only if the level-up condition is met (set by PHP session)
+    <?php if ($showLevelUpModal): ?>
+    showLevelUpModal();
+    <?php endif; ?>
 </script>
 
 </body>

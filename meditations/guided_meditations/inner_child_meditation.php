@@ -16,31 +16,60 @@ if ($conn->connect_error) {
 }
 
 // Get the logged-in user's ID from the session (assuming it's stored in session data)
-$userId = $_SESSION['user_id']; // Adjust the session key based on how your site handles user sessions
+$userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; // Ensure user ID is defined
+$currentLevel = 0; // Default to 0 in case user is not logged in
 
 // Check if the user is logged in and the ID exists
 if ($userId) {
-    // Decode the incoming JSON request
+    // Fetch the user's current level
+    $levelSql = "SELECT level FROM profiles WHERE user_id = ?";
+    $levelStmt = $conn->prepare($levelSql);
+    $levelStmt->bind_param("i", $userId);
+    $levelStmt->execute();
+    $levelResult = $levelStmt->get_result();
+    $levelRow = $levelResult->fetch_assoc();
+
+    if ($levelRow) {
+        $currentLevel = $levelRow['level']; // Set the user's level
+    }
+
+    $levelStmt->close();
+
+    // Handle incoming JSON request for modal update
     $data = json_decode(file_get_contents("php://input"), true);
 
-    // Check if the modal_shown is passed in the request
     if (isset($data['modal_shown']) && $data['modal_shown'] === 'true') {
-        // Update Blossoms by adding 20
-        $blossomsSql = "UPDATE profiles SET Blossoms = Blossoms + 20 WHERE user_id = ?";
+        // Calculate XP gain (halves each level, minimum of 200 XP)
+        $xpGain = max(5000 / pow(2, $currentLevel), 200);
+
+        // Adjust Blossoms based on the user's level
+        $blossomsGain = ($currentLevel == 0) ? 20 : 5;
+
+        // Update Blossoms by the calculated amount
+        $blossomsSql = "UPDATE profiles SET Blossoms = Blossoms + ? WHERE user_id = ?";
         $blossomsStmt = $conn->prepare($blossomsSql);
-        $blossomsStmt->bind_param("i", $userId);
+        $blossomsStmt->bind_param("ii", $blossomsGain, $userId);
         $blossomsStmt->execute();
 
-        // Update XP by adding 1000
-        $xpSql = "UPDATE profiles SET XP = XP + 5000 WHERE user_id = ?";
+        // Update XP based on calculated gain
+        $xpSql = "UPDATE profiles SET XP = XP + ? WHERE user_id = ?";
         $xpStmt = $conn->prepare($xpSql);
-        $xpStmt->bind_param("i", $userId);
+        $xpStmt->bind_param("ii", $xpGain, $userId);
         $xpStmt->execute();
 
+        // Check if updates were successful
         if ($blossomsStmt->affected_rows > 0 && $xpStmt->affected_rows > 0) {
-            echo json_encode(["status" => "success", "message" => "Blossoms and XP updated successfully!"]);
+            echo json_encode([
+                "status" => "success",
+                "message" => "Blossoms and XP updated successfully!",
+                "xpGained" => $xpGain,
+                "blossomsGained" => $blossomsGain
+            ]);
         } else {
-            echo json_encode(["status" => "error", "message" => "Failed to update Blossoms or XP."]);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Failed to update Blossoms or XP."
+            ]);
         }
 
         // Close the statements
@@ -324,6 +353,10 @@ $conn->close();
             color: red;
         }
 
+        .xp-number {
+            color: green;
+        }
+
         /* Modal visibility */
         #completionModal.show {
             display: flex; /* Show modal when .show class is added */
@@ -391,7 +424,16 @@ $conn->close();
     <div id="completionModal" class="modal">
         <div class="modal-content">
             <h2>Congratulations!</h2>
-            <h3>You’ve earned <strong><span class="blossoms-number">20</span></strong> Blossoms.</h3>
+            <h3>You’ve earned <strong>
+                <span class="blossoms-number">
+                    <?php echo ($currentLevel == 0) ? 20 : 5; ?>
+                </span>
+                </strong> Blossoms.</h3>
+            <h3>You’ve also gained <strong>
+            <span class="xp-number">
+                <?php echo max(5000 / pow(2, $currentLevel), 200); ?>
+            </span>
+                </strong> XP.</h3>
             <img src="../../pictures/blossoms_icon.png" alt="Blossoms Icon">
             <div>
                 <button id="restartMeditation">Restart Meditation</button>
