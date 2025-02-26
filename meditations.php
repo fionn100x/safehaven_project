@@ -130,6 +130,8 @@ mysqli_close($conn);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Dashboard</title>
 
+    </script><script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 </head>
 <body>
 <style>
@@ -578,8 +580,58 @@ mysqli_close($conn);
         // Show the modal
         document.getElementById('levelUpModal').style.display = 'block';
         document.getElementById('levelUpSound').play();
-    }
 
+        // Confetti burst effect
+        confetti({
+            particleCount: 200,  // Number of confetti pieces
+            spread: 100,         // How far they spread
+            origin: { y: 0.6 }   // Start position (lower = higher)
+        });
+
+        // Optional: Create a continuous confetti effect for 3 seconds
+        let duration = 3000; // 3 seconds
+        let animationEnd = Date.now() + duration;
+        let interval = setInterval(function() {
+            if (Date.now() > animationEnd) {
+                clearInterval(interval);
+            } else {
+                confetti({
+                    particleCount: 50,
+                    spread: 90,
+                    origin: { y: 0.6 }
+                });
+            }
+        }, 300);
+    }function showLevelUpModal() {
+        // Set the new level in the modal text
+        document.getElementById('newLevel').textContent = levelCount;
+
+        // Show the modal
+        document.getElementById('levelUpModal').style.display = 'block';
+        document.getElementById('levelUpSound').play();
+
+        // Confetti burst effect
+        confetti({
+            particleCount: 200,  // Number of confetti pieces
+            spread: 100,         // How far they spread
+            origin: { y: 0.6 }   // Start position (lower = higher)
+        });
+
+        // Optional: Create a continuous confetti effect for 3 seconds
+        let duration = 3000; // 3 seconds
+        let animationEnd = Date.now() + duration;
+        let interval = setInterval(function() {
+            if (Date.now() > animationEnd) {
+                clearInterval(interval);
+            } else {
+                confetti({
+                    particleCount: 50,
+                    spread: 90,
+                    origin: { y: 0.6 }
+                });
+            }
+        }, 300);
+    }
     // Function to close the modal
     function closeLevelUpModal() {
         // Hide the modal

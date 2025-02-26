@@ -387,7 +387,7 @@ $conn->close();
 <div id="meditationContent"></div>
 
 <!-- Audio Element -->
-<audio id="meditationMusic" src="../../audio/inner_child_meditation_audio.mp3" preload="auto"></audio>
+<audio id="meditationMusic" src="../../audio/inner_child_meditation_audio.mp3" preload="auto" loop></audio>
 
 <!-- Dialog -->
 <audio id="meditationDialog" src="../../audio/inner_child_meditation.mp3" preload="auto"></audio>
@@ -409,14 +409,14 @@ $conn->close();
 
 <div class="description">
     <img src="../../pictures/inner_child_intro.jpg" alt="Inner Child Meditation" class="intro-image">
-    <p>Inner Child Meditation is a practice that allows you to reconnect with the innocent, creative, and playful part of yourself.</p>
-    <p>It helps you heal old wounds and embrace your true, authentic self.</p>
-    <button class="start-button" id="startButton" style="font-family: 'Nunito', sans-serif;">Start Meditation</button>
-    <button id="pauseButton" style="display: none; opacity: 0; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: purple; border: none; padding: 20px; border-radius: 10px; cursor: pointer; transition: opacity 0.5s;">
+    <p></p>
+    <p></p>
+    <button class="start-button" id="startButton" style="font-family: 'Nunito', sans-serif; background-color: black">Start Meditation</button>
+    <button id="pauseButton" style="display: none; opacity: 0; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: black; border: none; padding: 20px; border-radius: 10px; cursor: pointer; transition: opacity 0.5s;">
         <i id="pauseIcon" class="fas fa-pause" style="font-size: 40px; color: white;"></i>
     </button>
     <div id="progressContainer" style="display: none; position: fixed; left: 50%; top: 55%; transform: translateX(-50%); width: 80%; height: 50px; background-color: #ddd; border-radius: 5px; cursor: pointer;">
-        <div id="progressBar" style="height: 100%; background-color: purple; width: 0%; border-radius: 5px; transition: width 0.2s ease-in-out;"></div>
+        <div id="progressBar" style="height: 100%; background-color: black; width: 0%; border-radius: 5px; transition: width 0.2s ease-in-out;"></div>
     </div>
     <div id="countdownContainer">
         <span id="countdownTimer">03:22</span>

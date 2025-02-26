@@ -129,6 +129,8 @@ mysqli_close($conn);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Dashboard</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 </head>
 
 <body>
@@ -217,16 +219,11 @@ mysqli_close($conn);
 <!-- Main Content Section -->
 <div class="main-content">
     <div style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white;">
-        <h1 style="font-size: 3rem; position: relative; top: -180px; right: -110px;">
+        <h1 style="font-size: 3rem; position: relative; top: -200px; right: -110px;">
             Guided Meditations
         </h1>
     </div>
     <header>
-        <div id="musicControl">
-            <button id="playPauseBtn">
-                <i class="fas fa-play"></i> <!-- FontAwesome Play Icon -->
-            </button>
-        </div>
         <nav>
             <div class="banner">
                 <a href="#">Home</a>
@@ -258,11 +255,15 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 1 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="#" class="card-link" id="unlockLink" style="background-color: red; color: white;">Level 1 Required</a>
+                    <a href="#" class="card-link" id="blossomsLink" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         10
                     </a>
+                </div>
+                <!-- This is the start meditation button that will be shown after unlocking -->
+                <div class="card-links" id="startMeditationContainer" style="display: none;">
+                    <a href="#" class="card-link" id="startMeditationBtn" style="background-color: green; color: white;">Start Meditation</a>
                 </div>
             <?php endif; ?>
         </div>
@@ -277,8 +278,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 2 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 2 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         20
                     </a>
@@ -297,8 +298,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 3 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 3 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         30
                     </a>
@@ -316,8 +317,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 4 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 4 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         40
                     </a>
@@ -339,8 +340,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 5 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 5 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         50
                     </a>
@@ -358,8 +359,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 6 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 6 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         60
                     </a>
@@ -377,8 +378,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 7 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 7 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         70
                     </a>
@@ -396,8 +397,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 8 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 8 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         85
                     </a>
@@ -415,8 +416,8 @@ mysqli_close($conn);
             <?php else: ?>
                 <!-- User is below Level 1, show locked state -->
                 <div class="card-links">
-                    <a href="level1-required.html" class="card-link" style="background-color: red; color: white;">Level 9 Required</a>
-                    <a href="level10.html" class="card-link" style="background-color: red; color: white;">
+                    <a href="" class="card-link" style="background-color: red; color: white;">Level 9 Required</a>
+                    <a href="" class="card-link" style="background-color: red; color: white;">
                         <img src="pictures/blossoms_icon.png" alt="Blossoms Icon" class="icon" />
                         100
                     </a>
@@ -426,7 +427,7 @@ mysqli_close($conn);
     </div>
 </div>
 <audio id="levelUpSound" src="audio/levelup.mp3" preload="auto"></audio>
-<div id="levelUpModal" class="modal" style="display: none;
+<div id="levelUpModal" class="modal" style="display: none; /* Always show for testing */
                                                position: fixed;
                                                top: 0;
                                                left: 0;
@@ -437,10 +438,21 @@ mysqli_close($conn);
     <div class="modal-content" style="background-color: white; padding: 20px;
                                      border-radius: 10px; text-align: center;
                                      position: absolute; top: 50%; left: 50%;
-                                     transform: translate(-50%, -50%); width: 80%; max-width: 400px;">
+                                     transform: translate(-50%, -50%);
+                                     width: 80%; max-width: 400px;">
         <h2 style="color: #4CAF50;">Level Up!</h2>
-        <p>Congratulations! You've reached Level: <span id="newLevel" style="color: black; font-weight: bold;"></span>!</p>
-        <button onclick="closeLevelUpModal()" style="padding: 10px 20px; background-color: rebeccapurple; color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button>
+        <p style="font-size: 1.5rem;">Congratulations! You've reached Level:</p>
+
+        <!-- MASSIVE Level Number -->
+        <span id="newLevel" style="color: red; font-weight: bold;
+                                   font-size: 10rem; /* HUGE size */
+                                   display: block; /* Moves it below the message */
+                                   line-height: 1;
+                                   margin: 20px 0;"></span> <!-- Default 99 for testing -->
+
+        <button onclick="closeLevelUpModal()" style="padding: 10px 20px; background-color: rebeccapurple;
+                                                     color: white; border: none; border-radius: 5px;
+                                                     cursor: pointer; font-size: 1.2rem;">OK</button>
     </div>
 </div>
 
@@ -721,6 +733,28 @@ mysqli_close($conn);
         // Show the modal
         document.getElementById('levelUpModal').style.display = 'block';
         document.getElementById('levelUpSound').play();
+
+        // Confetti burst effect
+        confetti({
+            particleCount: 200,  // Number of confetti pieces
+            spread: 100,         // How far they spread
+            origin: { y: 0.6 }   // Start position (lower = higher)
+        });
+
+        // Optional: Create a continuous confetti effect for 3 seconds
+        let duration = 3000; // 3 seconds
+        let animationEnd = Date.now() + duration;
+        let interval = setInterval(function() {
+            if (Date.now() > animationEnd) {
+                clearInterval(interval);
+            } else {
+                confetti({
+                    particleCount: 50,
+                    spread: 90,
+                    origin: { y: 0.6 }
+                });
+            }
+        }, 300);
     }
 
     // Function to close the modal
