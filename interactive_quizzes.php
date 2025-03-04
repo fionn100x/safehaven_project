@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-include('header.php');
 
 global $conn;
 $host = 'localhost';
@@ -43,7 +42,6 @@ $journals_count = $row['journals'];
 $blossoms_count = $row['blossoms'];
 $level_count = $row['level'];
 $xp_count = $row['XP'];
-
 if ($xp_count >= 10000) {
     // Calculate the remaining XP after leveling up
     $remaining_xp = $xp_count - 10000;
@@ -89,8 +87,7 @@ if (isset($_SESSION['level_up']) && !in_array($currentPage, $meditationPages)) {
 } else {
     $showLevelUpModal = false;
 }
-
-$profile_pic = $row['profile_pic'] ?: 'pictures/no_profile.jpg'; // Fallback to default if profile picture is not set
+$profile_pic = $row['profile_pic'] ?: '../pictures/no_profile.jpg'; // Fallback to default if profile picture is not set
 
 // Handle profile updates
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveProfile'])) {
@@ -130,7 +127,9 @@ mysqli_close($conn);
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Dashboard</title>
+
     </script><script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 </head>
 <body>
 <style>
@@ -157,7 +156,88 @@ mysqli_close($conn);
         width: 0%; /* This will be updated dynamically */
         transition: width 0.5s ease-in-out;
     }
+
+    /* Ensure the page content starts at the top and prevent scrolling */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* Disable scrolling */
+    }
+    .quiz-table {
+        width: 80%; /* MAKE TABLE LESS WIDE - ADJUST AS NEEDED */
+        border-collapse: collapse;
+        margin-top: 200px; /* MOVE TABLE UP/DOWN */
+        margin-left: 20%;
+    }
+
+    .quiz-table th, .quiz-table td {
+        border: 1px solid #ddd; /* BORDER SIZE RESET */
+        padding: 20px; /* REDUCE CELL HEIGHT - DECREASE FOR LESS SPACING */
+        text-align: center;
+        font-size: 1.2rem; /* MAKE TEXT SMALLER */
+    }
+
+    .quiz-table th {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 1.4rem; /* MAKE HEADER TEXT SMALLER */
+        padding: 15px; /* REDUCE HEADER SPACING */
+    }
+
+    .quiz-table td {
+        background-color: #f9f9f9;
+        min-width: 180px; /* MAKE COLUMNS LESS WIDE */
+    }
+
+    .quiz-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .quiz-table button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 12px; /* MAKE BUTTONS SMALLER */
+        font-size: 1rem; /* MAKE BUTTON TEXT SMALLER */
+        border: none;
+        border-radius: 5px; /* REDUCE ROUNDED EDGES */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .quiz-table button:hover {
+        background-color: #45a049;
+    }
+    .quiz-table th, .quiz-table td {
+        font-family: 'Nunito', sans-serif; /* Set font to Nunito */
+        color: black; /* Set text color to black */
+    }
+    .quiz-table button {
+        font-family: 'Nunito', sans-serif; /* Use Nunito font for button text */
+        background-color: #4CAF50; /* Green background */
+        color: white; /* White text color */
+        padding: 12px 20px; /* Increased padding for a bigger button */
+        border: none; /* Remove default border */
+        border-radius: 8px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+        text-transform: uppercase; /* Make text uppercase for emphasis */
+        font-weight: bold; /* Make the font bold for extra emphasis */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for a floating effect */
+    }
+
+    .quiz-table button:hover {
+        background-color: #45a049; /* Darker green on hover */
+        transform: scale(1.05); /* Slightly enlarge the button when hovered */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+    }
+
+    .quiz-table button:active {
+        transform: scale(0.98); /* Slightly shrink the button when clicked */
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Reduce shadow when active */
+    }
 </style>
+
 <div class="safe-haven-text">
     <img src="safe_haven_text.png" alt="Safe Haven Text" class="safe-haven-img">
 </div>
@@ -187,6 +267,7 @@ mysqli_close($conn);
         <p class="friends-count"><?php echo $friends_count; ?> Friends</p>
     </div>
 
+
     <!-- Profile Circle with correct ID -->
     <div class="profile-circle" id="profileCircle">
         <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" class="profile-pic">
@@ -207,19 +288,49 @@ mysqli_close($conn);
         <a href="#">Affirmations</a>
     </div>
 </div>
-
-<!-- Main Content Section -->
 <div class="main-content">
     <div style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white;">
-        <h1 style="font-size: 3rem;">Welcome To Your Dashboard!</h1>
-        <h2 style="font-size: 1.5rem;">There's nothing to see here. Try out some of our features!</h2>
+        <h1 class="quiz-heading" style="font-size: 3rem; position: relative; top: 150px; left: 15%; transform: translateX(-10%); text-align: center; color: white;">
+            Welcome To Interactive Quizzes!
+        </h1>
+        <table class="quiz-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th></th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>Personality Quiz</td>
+                <td>🧠</td>
+                <td>Understand yourself better through our personality quiz.</td>
+                <td><a href="quizzes/personality_quizzes/personality_quizzes.php" class="quiz-btn">
+                        <button>GO!</button>
+                    </a></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Self-Assessment</td>
+                <td>📊</td>
+                <td>Take a self-assessment to evaluate your mental well-being.</td>
+                <td><button onclick="window.location.href='/quiz/self-assessment';">GO!</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Stress Level Test</td>
+                <td>⚡</td>
+                <td>Find out how stressed you are with this quick test.</td>
+                <td><button onclick="window.location.href='/quiz/stress-level';">GO!</button></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <header>
-        <div id="musicControl">
-            <button id="playPauseBtn">
-                <i class="fas fa-play"></i> <!-- FontAwesome Play Icon -->
-            </button>
-        </div>
         <nav>
             <div class="banner">
                 <a href="#">Home</a>
@@ -231,8 +342,8 @@ mysqli_close($conn);
             </div>
         </nav>
     </header>
-</div>
 
+</div>
 <audio id="levelUpSound" src="audio/levelup.mp3" preload="auto"></audio>
 <div id="levelUpModal" class="modal" style="display: none;
                                                position: fixed;
@@ -262,6 +373,7 @@ mysqli_close($conn);
         <button id="logoutBtn">Logout</button>
     </div>
 </div>
+
 <div id="viewProfileModal" class="modal">
     <div class="modal-content">
         <!-- Profile Picture -->
@@ -298,15 +410,15 @@ mysqli_close($conn);
             <span>Blossoms: <?php echo $blossoms_count; ?></span>
         </div>
 
-            <div class="stat-card">
-                <i class="fas fa-spa"></i> <!-- Icon for meditations -->
-                <span>Meditations: <?php echo $meditations_count; ?></span>
-            </div>
+        <div class="stat-card">
+            <i class="fas fa-spa"></i> <!-- Icon for meditations -->
+            <span>Meditations: <?php echo $meditations_count; ?></span>
+        </div>
 
-            <div class="stat-card">
-                <i class="fas fa-journal-whills"></i> <!-- Icon for journals -->
-                <span>Journals: <?php echo $journals_count; ?></span>
-            </div>
+        <div class="stat-card">
+            <i class="fas fa-journal-whills"></i> <!-- Icon for journals -->
+            <span>Journals: <?php echo $journals_count; ?></span>
+        </div>
 
 
         <!-- Level with Progress Bar -->
@@ -510,6 +622,8 @@ mysqli_close($conn);
     editProfileModal.style.display = 'none';
 </script>
 
+<script src="audio.js"></script>
+
 <script>
     document.getElementById("logoutBtn").addEventListener("click", function () {
         window.location.href = "logout.php"; // Redirect to logout script
@@ -579,7 +693,6 @@ mysqli_close($conn);
             }
         }, 300);
     }
-
     // Function to close the modal
     function closeLevelUpModal() {
         // Hide the modal

@@ -22,7 +22,7 @@ $currentLevel = 0; // Default to 0 in case user is not logged in
 // Check if the user is logged in and the ID exists
 if ($userId) {
     // Fetch the user's current level
-    $levelSql = "SELECT level FROM profiles WHERE user_id = ?";
+    $levelSql = "SELECT level FROM user_profiles WHERE user_id = ?";
     $levelStmt = $conn->prepare($levelSql);
     $levelStmt->bind_param("i", $userId);
     $levelStmt->execute();
@@ -55,13 +55,13 @@ if ($userId) {
         $blossomsGain = ($currentLevel <= 1) ? 10 : 5;
 
         // Update Blossoms by the calculated amount
-        $blossomsSql = "UPDATE profiles SET Blossoms = Blossoms + ? WHERE user_id = ?";
+        $blossomsSql = "UPDATE user_profiles SET Blossoms = Blossoms + ? WHERE user_id = ?";
         $blossomsStmt = $conn->prepare($blossomsSql);
         $blossomsStmt->bind_param("ii", $blossomsGain, $userId);
         $blossomsStmt->execute();
 
         // Update XP based on calculated gain
-        $xpSql = "UPDATE profiles SET XP = XP + ? WHERE user_id = ?";
+        $xpSql = "UPDATE user_profiles SET XP = XP + ? WHERE user_id = ?";
         $xpStmt = $conn->prepare($xpSql);
         $xpStmt->bind_param("ii", $xpGain, $userId);
         $xpStmt->execute();

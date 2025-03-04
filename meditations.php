@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id']; // Get the logged-in user's ID
 
 // Query to get user profile details
-$sql = "SELECT first_name, last_name, birthday, bio, likes, dislikes, friends, meditations, journals, blossoms, level, profile_pic, XP FROM profiles WHERE user_id = '$user_id'";
+$sql = "SELECT first_name, last_name, birthday, bio, likes, dislikes, friends, meditations, journals, blossoms, level, profile_pic, XP FROM user_profiles WHERE user_id = '$user_id'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
@@ -51,7 +51,7 @@ if ($xp_count >= 10000) {
     $new_level = $level_count + 1;
 
     // Update the database with the remaining XP for the next level
-    $update_level_sql = "UPDATE profiles SET XP = ?, level = ? WHERE user_id = ?";
+    $update_level_sql = "UPDATE user_profiles SET XP = ?, level = ? WHERE user_id = ?";
     $stmt = $conn->prepare($update_level_sql);
     $stmt->bind_param("iii", $remaining_xp, $new_level, $user_id);
 
@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['saveProfile'])) {
     $likes = $conn->real_escape_string($_POST['likes']);
     $dislikes = $conn->real_escape_string($_POST['dislikes']);
 
-    $update_sql = "UPDATE profiles SET 
+    $update_sql = "UPDATE user_profiles SET 
                     first_name = '$firstName', 
                     last_name = '$lastName', 
                     bio = '$bio', 
@@ -204,7 +204,7 @@ mysqli_close($conn);
     <img src="safe_haven_logo.png" alt="Safe Haven Logo" class="sidebar-logo">
     <div class="sidebar-buttons">
         <a href="meditations.php">Meditations</a>
-        <a href="#">Interactive Quizzes</a>
+        <a href="interactive_quizzes.php">Interactive Quizzes</a>
         <a href="#">My Journals</a>
         <a href="#">Resources</a>
         <a href="#">Community Forum</a>

@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $full_name = $first_name . ' ' . $last_name;
 
             // Insert default data into the profiles table without user_id
-            $profile_sql = "INSERT INTO profiles (user_id, first_name, last_name, full_name, birthday, bio, likes, dislikes, friends, meditations, journals, blossoms, level, profile_pic)
+            $profile_sql = "INSERT INTO user_profiles (user_id, first_name, last_name, full_name, birthday, bio, likes, dislikes, friends, meditations, journals, blossoms, level, profile_pic)
                             VALUES ('$user_id', '$first_name', '$last_name', '$full_name', '', 'This is my bio!', 'None.', 'None.', 0, 0, 0, 0, 0, 'pictures/no_profile.jpg')";
 
             if (mysqli_query($conn, $profile_sql)) {
