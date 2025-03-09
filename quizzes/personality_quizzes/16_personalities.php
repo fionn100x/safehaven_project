@@ -66,6 +66,37 @@ if ($xp_count >= 10000) {
     $stmt->close();
 }
 
+
+// Assuming you're already in the context of your 16_personalities.php page
+
+// Get data from AJAX request
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['blossoms']) && isset($_POST['xp'])) {
+    // Check if user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
+        exit();
+    }
+
+    $user_id = $_SESSION['user_id'];
+    $blossoms = $_POST['blossoms'];
+    $xp = $_POST['xp'];
+
+    // Database connection (ensure $conn is already established in this file)
+    $sql = "UPDATE user_profiles SET blossoms = blossoms + ?, XP = XP + ? WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iii", $blossoms, $xp, $user_id);
+
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'Blossoms and XP updated successfully']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to update Blossoms and XP']);
+    }
+
+    $stmt->close();
+    exit();
+}
+
+
 $meditationPages = [
     'inner_child_meditation.php',
     'selfconfidence_boost.php',
@@ -480,6 +511,102 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['quiz_result'])) {
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        #quizCompletionModal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(200, 160, 255, 0.8); /* Light purple background with transparency */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's on top */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #quizCompletionModal .modal-content {
+            background: linear-gradient(to bottom, #D8D8D8, #C8A2D9); /* Gradient from light silver to light purple */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 3px solid #4B0082; /* Dark purple border */
+        }
+
+        #quizCompletionModal h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        #quizCompletionModal h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        #quizCompletionModal img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        #quizCompletionModal button {
+            background-color: white;
+            color: black;
+            padding: 10px 20px;
+            border: 2px solid #4B0082; /* Dark purple border */
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #quizCompletionModal button:hover {
+            background-color: #f0f0f0;
+        }
+
+        #quizCompletionModal .blossoms-number {
+            color: red;
+        }
+
+        .xp-number {
+            color: green;
+        }
+
+        /* Modal visibility */
+        #quizCompletionModal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Animation for the modal */
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        #quizCompletionModal.show .modal-content {
+            animation: bounce 1s ease;
+        }
+
+        /* Button styles */
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
 
 
@@ -2137,14 +2264,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['quiz_result'])) {
         <h2>Congrats! You've completed the 16 Personalities Quiz!</h2>
     </div>
 
-    <button id="finish-button" style="display: none;">See my personality!</button>
+    <div id="quizCompletionModal" class="modal">
+        <div class="modal-content">
+            <h2>Congratulations!</h2>
+            <h3>You’ve earned <strong>
+                    <span class="blossoms-number">10</span>
+                </strong> Blossoms.</h3>
+            <h3>You’ve also gained <strong>
+                    <span class="xp-number">1000</span>
+                </strong> XP.</h3>
+            <img src="../../pictures/blossoms_icon.png" alt="Blossoms Icon">
+        </div>
+    </div>
+
+    <button id="finish-button" style="display: none;">Continue!</button>
 
 
 </div>
 
 <script>
     $(document).ready(function() {
-        let firstClick = false; // Ensure firstClick is set to false for normal flow
+        let firstClick = true; // Ensure firstClick is set to false for normal flow
 
         // Fade in the content and start button when the page loads
         $('.content').css('opacity', 0).animate({ opacity: 1 }, 3000);
@@ -2194,40 +2334,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['quiz_result'])) {
         });
 
         // Handle Finish button click
-        $('#finish-button').on('click', function() {
-            // Calculate the personality type (this could be any result, based on your quiz logic)
-            const personalityType = calculatePersonality();  // Replace with your quiz result logic
+        const finishButton = document.getElementById("finish-button");
+        const quizCompletionModal = document.getElementById("quizCompletionModal");
+        const seePersonalityButton = document.getElementById("seePersonalityButton");
+        const completedSound = new Audio('../../audio/completed_sound.mp3');  // Replace with the correct sound path
 
-            // Get the user ID from a global variable or a PHP session value
-            const userId = <?php echo $_SESSION['user_id']; ?>; // Make sure this PHP variable is available on the page
+        // Show the completion modal
+        function showQuizCompletionModal() {
+            quizCompletionModal.classList.add("show");
+            completedSound.play();  // Play the sound on completion
+        }
 
-            // Get the quiz ID (assuming you have a static quiz ID for this quiz, e.g., 1 for 16Personalities)
-            const quizId = 1;  // Change this if you have a dynamic way to determine the quiz ID
+        // Listen for when the user clicks the "Continue!" button
+        finishButton.addEventListener("click", function() {
+            // The Blossoms and XP to be awarded
+            const blossoms = 10;
+            const xp = 1000;
 
-            // Prepare data to be sent to the server
+            // Get user ID from session or global context
+            const userId = <?php echo $_SESSION['user_id']; ?>;  // Ensure this PHP variable is available
+            const quizId = 1; // Adjust quiz ID if needed
+
+            // Prepare the data for the AJAX request
             const data = {
                 user_id: userId,
-                quiz_id: quizId,
-                result: personalityType,
-                timestamp: new Date().toISOString()  // Generate the timestamp (or let the DB handle it)
+                blossoms: blossoms,
+                xp: xp
             };
 
-            // Send AJAX request to store the result in the database
+            // Send the result to the server via AJAX (to the same 16_personalities.php file)
             $.ajax({
-                url: 'store_quiz_result.php',  // The endpoint where the result will be saved
+                url: '16_personalities.php',  // Same file since we're not using a separate PHP file
                 type: 'POST',
                 data: data,
                 success: function(response) {
-                    // Handle successful response
-                    alert('Your result has been saved! Redirecting to results...');
-                    window.location.href = "16_personalities_results.php"; // Redirect to the results page
+                    // Check if the response is valid JSON
+                    try {
+                        const result = JSON.parse(response);  // Parse the JSON response
+                        if (result.status === 'success') {
+                            alert('Your Blossoms and XP have been updated successfully!');
+                            // You can now redirect to the results page or show personality results
+                            window.location.href = "16_personalities_results.php";  // Or any other results page URL
+                        } else {
+                            alert(result.message);  // Display error message from the server
+                        }
+                    } catch (e) {
+                        console.error('Error parsing JSON response:', e);
+                        alert('There was an error updating your Blossoms and XP. Please try again.');
+                    }
                 },
                 error: function(xhr, status, error) {
-                    // Handle any errors that occur
-                    console.error('Error saving quiz result: ', error);
-                    alert('There was an error saving your result. Please try again.');
+                    console.error('Error updating Blossoms and XP:', error);
+                    alert('There was an error updating your Blossoms and XP. Please try again.');
                 }
             });
+
+            showQuizCompletionModal();  // Show the completion modal
+        });
+
+        // Prevent "See My Personality!" from triggering the update
+        seePersonalityButton.addEventListener("click", function() {
+            // Just redirect to the results page (without updating Blossoms and XP)
+            window.location.href = "16_personalities_results.php";  // Or any other results page URL
         });
     });
 
@@ -3013,7 +3181,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['quiz_result'])) {
         return `${IvsE}${SvsN}${TvsF}${JvsP}`;
     }
 </script>
-
 
 </body>
 </html>

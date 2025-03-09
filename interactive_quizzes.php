@@ -358,8 +358,14 @@ mysqli_close($conn);
                                      position: absolute; top: 50%; left: 50%;
                                      transform: translate(-50%, -50%); width: 80%; max-width: 400px;">
         <h2 style="color: #4CAF50;">Level Up!</h2>
-        <p>Congratulations! You've reached Level: <span id="newLevel" style="color: black; font-weight: bold;"></span>!</p>
-        <button onclick="closeLevelUpModal()" style="padding: 10px 20px; background-color: rebeccapurple; color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button>
+        <p>Congratulations! You've reached Level: <span id="newLevel" style="color: red; font-weight: bold;
+                                   font-size: 10rem; /* HUGE size */
+                                   display: block; /* Moves it below the message */
+                                   line-height: 1;
+                                   margin: 20px 0;"></span></p>
+        <button onclick="closeLevelUpModal()" style="padding: 10px 20px; background-color: rebeccapurple;
+                                                     color: white; border: none; border-radius: 5px;
+                                                     cursor: pointer; font-size: 1.2rem;">OK</button>
     </div>
 </div>
 

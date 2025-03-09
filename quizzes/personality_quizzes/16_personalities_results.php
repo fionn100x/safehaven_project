@@ -849,7 +849,7 @@ $sections = isset($personality_descriptions[$personality_type]) ? $personality_d
         body {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             min-height: 100vh;
             background: url('../../pictures/personality_quizzes_background.png') no-repeat center center fixed;
             background-size: cover;
@@ -857,116 +857,150 @@ $sections = isset($personality_descriptions[$personality_type]) ? $personality_d
             margin: 0;
         }
 
+        /* Content Container */
         .content-container {
             display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(118, 151, 197, 0.95); /* Dark semi-transparent overlay */
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
             width: 80%;
-            justify-content: space-between;
+            max-width: 1000px;
         }
 
+        /* Main Content */
         .main-content {
-            width: 70%;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            position: relative;
-            padding-bottom: 60px; /* Prevents text from overlapping buttons */
-        }
-
-        .sidebar {
-            width: 25%;
-            background-color: rgba(255, 255, 255, 0.9);
+            flex: 2;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            margin-left: 20px;
         }
 
-        .sidebar h3 {
-            text-align: center;
-            font-size: 1.8rem;
-            color: #3E2723;
-            margin-bottom: 20px;
+        /* Personality Title */
+        #personality-title {
+            color: #000000;
+            font-size: 2rem;
+            font-weight: bold;
         }
 
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
+        /* Section Titles */
+        h2 {
+            color: #f4a261;
         }
 
-        .sidebar ul li {
-            font-size: 1.6rem;
+        /* Description */
+        #description {
+            font-size: 1.1rem;
+            color: #ddd;
+            margin-top: 10px;
             padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
         }
 
-        .sidebar ul li:hover {
-            background-color: #FF7F50;
-            color: white;
-        }
-
-        .sidebar ul li.selected {
-            background-color: #FF7F50;
-            color: white;
-        }
-
+        /* Navigation Buttons */
         .nav-buttons {
-            position: absolute; /* Locks buttons inside the container */
-            bottom: 10px; /* Sticks them to the bottom */
-            width: 100%; /* Ensures full width for correct spacing */
-            display: flex;
-            justify-content: space-between; /* Places buttons at left & right */
-            pointer-events: auto;
+            margin-top: 20px;
         }
 
         .nav-button {
-            background-color: #FF7F50;
+            background: #ff4c29;
             color: white;
-            font-size: 1.5rem;
-            padding: 10px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
             border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 10px;
+            font-size: 1rem;
             cursor: pointer;
-        }
-
-        /* Absolutely fix left button */
-        #prev {
-            position: absolute;
-            left: 10px;
-            bottom: 10px;
-        }
-
-        /* Absolutely fix right button */
-        #next {
-            position: absolute;
-            right: 10px;
-            bottom: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0px 5px 15px rgba(255, 76, 41, 0.3);
         }
 
         .nav-button:hover {
-            background-color: #FF6347;
+            background: #e63946;
+            transform: scale(1.05);
+        }
+
+        /* Back to Quizzes Button */
+        .back-button-container {
+            margin-top: 20px;
+        }
+
+        .back-button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 5px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .back-button:hover {
+            background: #357ab7;
             transform: scale(1.1);
+            box-shadow: 0px 10px 20px rgba(74, 144, 226, 0.5);
         }
 
-
-
-        #description {
-            padding-left: 20px;  /* Adds padding to the left */
-            padding-right: 20px; /* Adds padding to the right */
-            font-size: 1.2rem;   /* You can adjust the font size if needed */
-            max-width: 800px;    /* Optional: Ensures the text doesn’t stretch too wide */
-            margin: 0 auto;      /* Centers the paragraph */
+        /* Sidebar */
+        .sidebar {
+            flex: 1;
+            background: rgba(89, 151, 253, 0.9); /* Darker sidebar */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
         }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 1rem;
+            color: #eaeaea;
+            text-align: center;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .sidebar li:hover {
+            background: #ff4c29;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(255, 76, 41, 0.3);
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .logo-container img {
+            width: 170px; /* Adjust size as needed */
+            height: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.1); /* Slight zoom effect on hover */
+        }
+
     </style>
 </head>
 <body>
 
 <div class="content-container">
-    <!-- Main Content Area -->
+    <div class="logo-container">
+        <img src="/safehaven_project/safe_haven_logo.png" alt="Safe Haven Logo">
+    </div>
     <div class="main-content">
         <h1>Your Personality Type: <span id="personality-title"></span></h1>
         <h2 id="current-section">Introduction</h2>
@@ -976,6 +1010,11 @@ $sections = isset($personality_descriptions[$personality_type]) ? $personality_d
         <div class="nav-buttons" id="nav-buttons">
             <button id="prev" class="nav-button" onclick="changePage(-1)" disabled>&#8592;</button>
             <button id="next" class="nav-button" onclick="changePage(1)">&#8594;</button>
+        </div>
+
+        <!-- Back to Quizzes Button -->
+        <div class="back-button-container">
+            <button id="back-to-quizzes" class="back-button" onclick="window.location.href='/safehaven_project/interactive_quizzes.php';">Back to Quizzes</button>
         </div>
     </div>
 
