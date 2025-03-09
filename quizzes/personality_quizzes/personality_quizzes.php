@@ -98,10 +98,11 @@
             }
         }
 
+
         /* Quiz container - overlapping the background */
         .quiz-container {
             position: absolute;
-            top: 40%; /* Starts at 70% of the viewport height (same position as before) */
+            top: 40%; /* Starts at 40% of the viewport height */
             transform: translateY(-50%); /* Centers it vertically */
             width: 90%;
             max-width: 1200px;
@@ -219,6 +220,21 @@
             background-color: #FF6347; /* Darker orange on hover */
             transform: scale(1.1); /* Slightly enlarge the button */
         }
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 3s ease forwards;
+            position: absolute; /* Ensure it stays in place during animation */
+            top: 40%; /* Make sure it starts at the same position */
+            transform: translateY(-50%); /* Keep it centered vertically */
+        }
     </style>
 </head>
 <body>
@@ -232,7 +248,7 @@
     <div class="quiz-box">
         <h3>16 PERSONALITIES</h3>
         <p>Offers a comprehensive analysis of your personality type based on the Myers-Briggs Type Indicator.</p>
-        <button class="go-button" onclick="window.location.href='path/to/personality_quiz1.php'">GO!</button>
+        <button class="go-button" onclick="window.location.href='16_personalities.php'">GO!</button>
     </div>
     <div class="quiz-box">
         <h3>BUZZFEED</h3>
@@ -285,6 +301,7 @@
         document.getElementById("subtext").classList.add("fade-in");
     }, 4000);
 </script>
+
 </body>
 </html>
 
